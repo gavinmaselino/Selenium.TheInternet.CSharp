@@ -16,9 +16,19 @@ public class Tests
     }
     
     [Test]
-    public void Assert_Add_Remove_Page_Loads()
+    public void Delete_Button_Created_And_Count_Is_One()
     {
         var context = new BaseContext(driver);
-        context.SelectAddRemoveElements();
+        
+        context.SelectAddRemoveElements()
+            .AddNewDeleteElement()
+            .AssertDeleteButtonCountIsEqualTo(1);
+
+    }
+
+    [TearDown]
+    public void CloseBrowserSession()
+    {
+        driver.Quit();
     }
 }

@@ -10,7 +10,7 @@ namespace Selenium.TheInternet.CSharp.PageObject;
 
 public class BaseContext
 {
-    private WebDriver driver;
+    public WebDriver driver;
     private WebDriverWait wait;
 
     public BaseContext(WebDriver driver)
@@ -25,9 +25,10 @@ public class BaseContext
     // Expression bodied version is consider a better approach.
     private IWebElement linkAddRemove => driver.FindElement(By.XPath("//a[text() = 'Add/Remove Elements']"));
 
-    public void SelectAddRemoveElements()
+    public AddRemoveContext SelectAddRemoveElements()
     {
         linkAddRemove.Click();
+        return new AddRemoveContext(driver);
     }
     
     
