@@ -8,7 +8,7 @@ public class AddRemoveContext : BaseContext
     // The base keyword is used to access members of the base class from within a derived class.
     // Only inheriting once as an example to get the base keyword. 
     // In reality, there are no members in Base that can be clicked on from other contexts. 
-    public AddRemoveContext(WebDriver driver) : base(driver)
+    public AddRemoveContext(IWebDriver driver) : base(driver)
     {
         this.driver = driver;
     }
@@ -17,9 +17,12 @@ public class AddRemoveContext : BaseContext
     
     private int delBtnCount => driver.FindElements(By.CssSelector("button.added-manually")).Count;
 
-    public AddRemoveContext AddNewDeleteElement()
+    public AddRemoveContext CreateDeleteButtons(int count)
     {
-        btnAddElement.Click();
+        for (var i = 0; i < count; i++)
+        {
+            btnAddElement.Click();
+        }
 
         return this;
     }

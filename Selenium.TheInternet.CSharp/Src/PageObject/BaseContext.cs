@@ -1,6 +1,4 @@
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.PageObjects;
 
 namespace Selenium.TheInternet.CSharp.PageObject;
 
@@ -10,13 +8,13 @@ namespace Selenium.TheInternet.CSharp.PageObject;
 
 public class BaseContext
 {
-    public WebDriver driver;
-    private WebDriverWait wait;
+    public IWebDriver driver;
 
-    public BaseContext(WebDriver driver)
+
+    public BaseContext(IWebDriver driver)
     {
         this.driver = driver;
-        wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+        
         //PageFactory.InitElements(driver, this);
 
     }
@@ -24,11 +22,18 @@ public class BaseContext
     //[FindsBy(How = How.XPath, Using = "//a[text() = 'Add/Remove Elements']")]
     // Expression bodied version is consider a better approach.
     private IWebElement linkAddRemove => driver.FindElement(By.XPath("//a[text() = 'Add/Remove Elements']"));
+    private IWebElement linkSortableTables => driver.FindElement(By.XPath("//a[text() = 'Sortable Data Tables']"));
 
     public AddRemoveContext SelectAddRemoveElements()
     {
         linkAddRemove.Click();
         return new AddRemoveContext(driver);
+    }
+
+    public DataTableContext SelectDataTableLink()
+    {
+        linkSortableTables.Click();
+        return new DataTableContext(driver);
     }
     
     

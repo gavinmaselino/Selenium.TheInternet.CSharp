@@ -1,21 +1,31 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 
 namespace Selenium.TheInternet.CSharp;
 
 public static class WebDriverFactory
 {
-    private static WebDriver driver;
-    private static string _chosenBrowser = "Chrome";
+    private static IWebDriver Driver;
+    private static WebDriverWait wait;
+    private const string ChosenBrowser = "Chrome";
+    private const bool Headless = true;
 
-    public static WebDriver SelectBrowser()
+    public static IWebDriver SelectBrowser()
     {
-        if (_chosenBrowser.ToLower() == "chrome")
+        if (ChosenBrowser.ToLower() == "chrome")
         {
-            driver = new ChromeDriver();
-        }
+            var options = new ChromeOptions();
+            if (Headless)
+            {
+                options.AddArgument("--headless");
+            }
 
-        return driver;
+            Driver = new ChromeDriver(options);
+        }
+        
+        wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
+        return Driver;
     }
     
 }
