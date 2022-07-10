@@ -8,17 +8,33 @@ public class DataTableTests : SetupTeardown
 {
     
     [Test]
-    public void Confirm_Last_Name_Is_Returned()
+    public void Confirm_Url_Is_Found_In_Table_One()
     {
-        var lastname = "Bach";
-        var due = "$51.00";
-        var expectedWebSite = "http://www.frank.com";
+        const string lastname = "Bach";
+        const string due = "$51.00";
+        const string expectedWebSite = "http://www.frank.com";
         
         var context = new BaseContext(driver);
         context.SelectDataTableLink()
-            .AssertLinkText(lastname, due, expectedWebSite);
+            .AssertTableOneUrl(lastname, due, expectedWebSite);
 
     }
+
+    [Test]
+    public void Confirm_Url_Is_Found_In_Table_Two()
+    {
+        const string lastname = "Doe";
+        const string email = "jdoe@hotmail.com";
+        const string expectedWebSite = "http://www.jdoe.com";
+
+        var context = new BaseContext(driver);
+            context
+            .SelectDataTableLink()
+            .AssertTableTwoUrl(lastname, email, expectedWebSite);
+
+    }
+    
+    
     
     
     
