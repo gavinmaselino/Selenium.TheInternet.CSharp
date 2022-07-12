@@ -23,6 +23,7 @@ public class BaseContext
     // Expression bodied version is consider a better approach.
     private IWebElement linkAddRemove => driver.FindElement(By.XPath("//a[text() = 'Add/Remove Elements']"));
     private IWebElement linkSortableTables => driver.FindElement(By.XPath("//a[text() = 'Sortable Data Tables']"));
+    private IWebElement linkJSAlerts => driver.FindElement(By.XPath("//a[text() = 'JavaScript Alerts']"));
 
     public AddRemoveContext SelectAddRemoveElements()
     {
@@ -36,6 +37,11 @@ public class BaseContext
         return new DataTableContext(driver);
     }
     
+    public JSAlertContext SelectJSAlertLink()
+    {
+        linkJSAlerts.Click();
+        return new JSAlertContext(driver);
+    }
     
     
 }
