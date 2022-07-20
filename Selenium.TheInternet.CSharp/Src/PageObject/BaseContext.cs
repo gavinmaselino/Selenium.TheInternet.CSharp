@@ -24,6 +24,7 @@ public class BaseContext
     private IWebElement linkAddRemove => driver.FindElement(By.XPath("//a[text() = 'Add/Remove Elements']"));
     private IWebElement linkSortableTables => driver.FindElement(By.XPath("//a[text() = 'Sortable Data Tables']"));
     private IWebElement linkJSAlerts => driver.FindElement(By.XPath("//a[text() = 'JavaScript Alerts']"));
+    private IWebElement linkDigestAuth => driver.FindElement(By.XPath("//a[text() = 'Digest Authentication']"));
 
     public AddRemoveContext SelectAddRemoveElements()
     {
@@ -41,6 +42,12 @@ public class BaseContext
     {
         linkJSAlerts.Click();
         return new JSAlertContext(driver);
+    }
+    
+    public DigestAuthenticationContext SelectDigestAuthLink()
+    {
+        linkDigestAuth.Click();
+        return new DigestAuthenticationContext(driver);
     }
     
     

@@ -5,12 +5,14 @@
 public class SetupTeardown
 { 
     protected IWebDriver driver;
-        
-        [SetUp]
+    protected const string Protocol = "https://";
+    protected const string Uri = "the-internet.herokuapp.com/";
+
+    [SetUp]
         protected void Setup()
         {
             driver = WebDriverFactory.SelectBrowser();
-            driver.Navigate().GoToUrl("https://the-internet.herokuapp.com/");
+            driver.Navigate().GoToUrl(Protocol + Uri);
         }
         
         [TearDown]
