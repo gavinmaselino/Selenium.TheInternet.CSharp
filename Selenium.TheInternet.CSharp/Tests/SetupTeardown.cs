@@ -1,23 +1,25 @@
+ using NUnit.Framework;
  using OpenQA.Selenium;
 
  namespace Selenium.TheInternet.CSharp.Tests;
 
 public class SetupTeardown
 { 
-    protected IWebDriver driver;
+    protected IWebDriver Driver;
     protected const string Protocol = "https://";
     protected const string Uri = "the-internet.herokuapp.com/";
 
     [SetUp]
-        protected void Setup()
+        public void Setup()
         {
-            driver = WebDriverFactory.SelectBrowser();
-            driver.Navigate().GoToUrl(Protocol + Uri);
+            Driver = WebDriverFactory.InitBrowser();
+            Driver.Navigate().GoToUrl($"{Protocol}{Uri}");
         }
         
         [TearDown]
-        protected void CloseBrowserSession() 
+        public void CloseBrowserSession() 
         {
-            driver.Quit();
+            Driver.Close();
+            Driver.Quit();
         }
 }
