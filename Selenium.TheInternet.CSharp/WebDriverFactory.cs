@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
@@ -8,57 +9,85 @@ namespace Selenium.TheInternet.CSharp;
 
 public static class WebDriverFactory
 {
-    private static IWebDriver driver;
-    public static IWebDriver InitBrowser(BrowserName browserName = BrowserName.Chrome, bool headless = true)
+    private static IWebDriver _driver;
+    private static string? _browserName;
+    private static bool _headless;
+    
+    public static IWebDriver InitBrowser()
     {
-        switch (browserName)
+        _browserName = GetConfigurationValue(config => config.BrowserName.ToLower(), "BrowserName");
+        _headless = GetConfigurationValue(config => config.Headless, "Headless");
+
+        switch (_browserName)
         {
-            case BrowserName.Chrome:
-                if (headless)
+            case "chrome":
+                if (_headless)
                 {
                     var options = new ChromeOptions();
                     options.AddArgument("--headless");
-                    driver = new ChromeDriver(options);
+                    _driver = new ChromeDriver(options);
                     break;
                 }
-                driver = new ChromeDriver();
+                _driver = new ChromeDriver();
                 break;
-            case BrowserName.FireFox:
-                if (headless)
+            case "firefox":
+                if (_headless)
                 {
                     var options = new FirefoxOptions();
                     options.AddArgument("--headless");
-                    driver = new FirefoxDriver(options);
+                    _driver = new FirefoxDriver(options);
                     break;
                 }
-                driver = new FirefoxDriver();
+                _driver = new FirefoxDriver();
                 break;
-            case BrowserName.Edge:
-                if (headless)
+            case "edge":
+                if (_headless)
                 {
                     var options = new EdgeOptions();
                     options.AddArgument("--headless");
-                    driver = new EdgeDriver(options);
+                    _driver = new EdgeDriver(options);
                     break;
                 }
-                driver = new EdgeDriver();
+                _driver = new EdgeDriver();
                 break;
-            case BrowserName.Safari:
-                if (headless)
+            case "safari":
+                if (_headless)
                 {
                     throw new WebDriverException("Safari Browser does not currently support headless mode");
                 }
-                driver = new SafariDriver();
+                _driver = new SafariDriver();
+                break;
+            default:
+                if (_headless)
+                {
+                    var options = new ChromeOptions();
+                    options.AddArgument("--headless");
+                    _driver = new ChromeDriver(options);
+                    break;
+                }
+                _driver = new ChromeDriver();
                 break;
         }
-        return driver;
+        return _driver;
     }
     
-    public enum BrowserName
+    private static T GetConfigurationValue<T>(Func<WebDriverConfiguration, T> valueSelector, string settingName)
     {
-        Chrome,
-        FireFox,
-        Edge,
-        Safari
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
+        
+        var webDriverConfiguration = new WebDriverConfiguration();
+        configuration.GetSection("WebDriverConfiguration").Bind(webDriverConfiguration);
+
+        try
+        {
+            return valueSelector(webDriverConfiguration);
+        }
+        catch (NullReferenceException)
+        {
+            throw new NullReferenceException($"The {settingName} setting has either been mis-spelt or cannot be found in the appsettings file");
+        }
     }
 }

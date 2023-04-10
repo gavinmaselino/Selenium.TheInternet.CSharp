@@ -10,7 +10,7 @@ public static class WebElementExtensions
  /// <param name="webDriver"></param>
  /// <param name="elementSelector"></param>
  /// <param name="textContent"></param>
- /// <returns>IWebElement</returns>
+ /// <returns>The IWebElement value</returns>
  /// <exception cref="ArgumentOutOfRangeException"></exception>
     public static IWebElement FindElementWithAssociatedText(this IWebDriver webDriver, string elementSelector, string textContent)
     {
