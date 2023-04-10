@@ -1,42 +1,27 @@
-using OpenQA.Selenium;
-using Selenium.TheInternet.CSharp.PageObject;
+using NUnit.Framework;
+using Selenium.TheInternet.CSharp.Context;
 
 namespace Selenium.TheInternet.CSharp.Tests;
 
 [TestFixture]
 public class DataTableTests : SetupTeardown
 {
-    
-    [Test]
-    public void Confirm_Url_Is_Found_In_Table_One()
+    [TestCase("Bach", "$51.00", "http://www.frank.com")]
+    [TestCase("Conway", "$50.00", "http://www.timconway.com")]
+    public void Confirm_Url_Is_Found_In_Table_One(string lastname, string due, string expectedWebSite)
     {
-        const string lastname = "Bach";
-        const string due = "$51.00";
-        const string expectedWebSite = "http://www.frank.com";
-        
-        var context = new BaseContext(driver);
+        var context = new BaseContext(Driver);
         context.SelectDataTableLink()
             .AssertTableOneUrl(lastname, due, expectedWebSite);
-
     }
 
-    [Test]
-    public void Confirm_Url_Is_Found_In_Table_Two()
+    [TestCase("Smith", "jsmith@gmail.com","http://www.jsmith.com")]
+    [TestCase("Doe", "jdoe@hotmail.com","http://www.jdoe.com")]
+    public void Confirm_Url_Is_Found_In_Table_Two(string lastname, string email, string expectedWebSite)
     {
-        const string lastname = "Doe";
-        const string email = "jdoe@hotmail.com";
-        const string expectedWebSite = "http://www.jdoe.com";
-
-        var context = new BaseContext(driver);
-            context
+        var context = new BaseContext(Driver);
+        context
             .SelectDataTableLink()
             .AssertTableTwoUrl(lastname, email, expectedWebSite);
-
     }
-    
-    
-    
-    
-    
-    
 }

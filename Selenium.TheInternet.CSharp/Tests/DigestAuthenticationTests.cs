@@ -1,4 +1,5 @@
-using Selenium.TheInternet.CSharp.PageObject;
+using NUnit.Framework;
+using Selenium.TheInternet.CSharp.Context;
 
 namespace Selenium.TheInternet.CSharp.Tests;
 
@@ -7,13 +8,12 @@ public class DigestAuthenticationTests : SetupTeardown
     [Test]
     public void Adding_Credentials_And_Accept()
     {
-        var httpProtocol = Protocol;
-        var address = Uri + "digest_auth";
+        const string address = $"{Uri}digest_auth";
         const string user = "admin";
         const string pw = "admin";
-        var context = new BaseContext(driver);
+        var context = new BaseContext(Driver);
         context.SelectDigestAuthLink()
-            .EnterCredentials(user, pw, httpProtocol, address)
+            .EnterCredentials(user, pw, Protocol, address)
             .AssertSuccessMessageIsDisplayed();
     }
 }

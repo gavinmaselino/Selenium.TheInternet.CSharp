@@ -1,31 +1,64 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Safari;
 
 namespace Selenium.TheInternet.CSharp;
 
 public static class WebDriverFactory
 {
-    private static IWebDriver Driver;
-    private static WebDriverWait wait;
-    private const string ChosenBrowser = "Chrome";
-    private const bool Headless = true;
-
-    public static IWebDriver SelectBrowser()
+    private static IWebDriver driver;
+    public static IWebDriver InitBrowser(BrowserName browserName = BrowserName.Chrome, bool headless = true)
     {
-        if (ChosenBrowser.ToLower() == "chrome")
+        switch (browserName)
         {
-            var options = new ChromeOptions();
-            if (Headless)
-            {
-                options.AddArgument("--headless");
-            }
-
-            Driver = new ChromeDriver(options);
+            case BrowserName.Chrome:
+                if (headless)
+                {
+                    var options = new ChromeOptions();
+                    options.AddArgument("--headless");
+                    driver = new ChromeDriver(options);
+                    break;
+                }
+                driver = new ChromeDriver();
+                break;
+            case BrowserName.FireFox:
+                if (headless)
+                {
+                    var options = new FirefoxOptions();
+                    options.AddArgument("--headless");
+                    driver = new FirefoxDriver(options);
+                    break;
+                }
+                driver = new FirefoxDriver();
+                break;
+            case BrowserName.Edge:
+                if (headless)
+                {
+                    var options = new EdgeOptions();
+                    options.AddArgument("--headless");
+                    driver = new EdgeDriver(options);
+                    break;
+                }
+                driver = new EdgeDriver();
+                break;
+            case BrowserName.Safari:
+                if (headless)
+                {
+                    throw new WebDriverException("Safari Browser does not currently support headless mode");
+                }
+                driver = new SafariDriver();
+                break;
         }
-        
-        wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
-        return Driver;
+        return driver;
     }
     
+    public enum BrowserName
+    {
+        Chrome,
+        FireFox,
+        Edge,
+        Safari
+    }
 }
